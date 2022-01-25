@@ -32,7 +32,7 @@ function Titulo(props) {
 
 // export default HomePage
 export default function PaginaInicial() {
-    const [username, setUsername] = React.useState('larimoro20')
+    const [username, setUsername] = React.useState('')
     const router = useRouter();
     return (
         <>
@@ -77,6 +77,7 @@ export default function PaginaInicial() {
                         </Text>
                         <TextField
                             value={username}
+                            placeholder='larimoro20'
                             fullWidth
                             textFieldColors={{
                                 neutral: {

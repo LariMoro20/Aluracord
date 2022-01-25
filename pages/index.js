@@ -41,17 +41,19 @@ export default function PaginaInicial() {
     const router = useRouter();
 
     function getDataFromGithub() {
-        fetch(`https://api.github.com/users/${username}`)
-            .then((res) => {
-                return res.json()
-            }).then((respComplete) => {
-                setFollowers(respComplete.followers)
-                setLocation(respComplete.location)
-                setBio(respComplete.bio)
-            }).catch((error) => {
-                setInfos('')
-                console.log('deuerro')
-            });
+        if (username.length > 2) {
+            fetch(`https://api.github.com/users/${username}`)
+                .then((res) => {
+                    return res.json()
+                }).then((respComplete) => {
+                    setFollowers(respComplete.followers)
+                    setLocation(respComplete.location)
+                    setBio(respComplete.bio)
+                }).catch((error) => {
+                    setInfos('')
+                    console.log(error)
+                });
+        }
     }
 
     /*React.useEffect(() => {
@@ -175,19 +177,19 @@ export default function PaginaInicial() {
                             {followers &&
                                 <div className='col-md-12'>
                                     <small style={{ marginBottom: '5px' }}> {bio} </small>
-                                    <p style={{ marginBottom: '5px' }}>  <br/> Seguidores: {followers} <br /> {location}</p>
+                                    <p style={{ marginBottom: '5px' }}>  <br /> Seguidores: {followers} <br /> {location}</p>
                                 </div>
                             }
 
                             <Button label="Carregar dados"
-                            buttonColors={{
-                                contrastColor: appConfig.theme.colors.neutrals["000"],
-                                mainColor: appConfig.theme.colors.primary[100],
-                            }}
-                             onClick={(e) => {
-                                e.preventDefault()
-                                getDataFromGithub()
-                            }} />
+                                buttonColors={{
+                                    contrastColor: appConfig.theme.colors.neutrals["000"],
+                                    mainColor: appConfig.theme.colors.primary[100],
+                                }}
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    getDataFromGithub()
+                                }} />
                         </Text>
                     </Box>
                     {/* Photo Area */}

@@ -40,7 +40,7 @@ export default function PaginaInicial() {
                 styleSheet={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     backgroundColor: appConfig.theme.colors.primary[500],
-                    backgroundImage: 'url(https://images6.alphacoders.com/118/thumb-1920-1185407.jpg)',
+                    backgroundImage: 'url(images/backgrounds/back-vis.jpg)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
             >
@@ -126,7 +126,7 @@ export default function PaginaInicial() {
                                 borderRadius: '50%',
                                 marginBottom: '16px',
                             }}
-                           src={`${username.length > 2 ? `https://github.com/${username}.png` : '/zule.jpg'}`}
+                           src={`${username.length > 2 ? `https://github.com/${username}.png` : 'images/theme/zule.jpg'}`}
                         />
                         <Text
                             variant="body4"

@@ -37,7 +37,7 @@ export default function PaginaInicial() {
     const [location, setLocation] = React.useState('');
     const [followers, setFollowers] = React.useState('');
     const [bio, setBio] = React.useState('');
-
+    const [error, setError] = React.useState('');
     const router = useRouter();
 
     function getDataFromGithub() {
@@ -51,7 +51,7 @@ export default function PaginaInicial() {
                     setBio(respComplete.bio)
                 }).catch((error) => {
                     setInfos('')
-                    console.log(error)
+                    setError('Houve algum erro')
                 });
         }
     }
@@ -174,12 +174,19 @@ export default function PaginaInicial() {
 
 
 
-                            {followers &&
+                            {(followers && !error) &&
                                 <div className='col-md-12'>
                                     <small style={{ marginBottom: '5px' }}> {bio} </small>
                                     <p style={{ marginBottom: '5px' }}>  <br /> Seguidores: {followers} <br /> {location}</p>
                                 </div>
                             }
+                            {error &&
+                                <div className='col-md-12'>
+                                    <p style={{ marginBottom: '5px' }}> {error} </p>
+                                </div>
+                            }
+
+
 
                             <Button label="Carregar dados"
                                 buttonColors={{

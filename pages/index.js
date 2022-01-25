@@ -164,7 +164,7 @@ export default function PaginaInicial() {
                             variant="body4"
                             styleSheet={{
                                 color: appConfig.theme.colors.neutrals[200],
-                                backgroundColor: appConfig.theme.colors.neutrals[900],
+                               
                                 padding: '10px 10px',
                                 borderRadius: '1000px',
                                 textAlign: 'center'

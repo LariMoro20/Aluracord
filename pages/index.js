@@ -30,10 +30,39 @@ function Titulo(props) {
     )
 }*/
 
+
 // export default HomePage
 export default function PaginaInicial() {
     const [username, setUsername] = React.useState('')
+    const [location, setLocation] = React.useState('');
+    const [followers, setFollowers] = React.useState('');
+    const [bio, setBio] = React.useState('');
+
     const router = useRouter();
+
+    function getDataFromGithub() {
+        fetch(`https://api.github.com/users/${username}`)
+            .then((res) => {
+                return res.json()
+            }).then((respComplete) => {
+                setFollowers(respComplete.followers)
+                setLocation(respComplete.location)
+                setBio(respComplete.bio)
+            }).catch((error) => {
+                setInfos('')
+                console.log('deuerro')
+            });
+    }
+
+    /*React.useEffect(() => {
+        fetch(`https://api.github.com/users/${username}/`)
+            .then((res) => {
+                return res.json()
+            }).then((respComplete) => {
+                console.log(respComplete)
+            }).catch
+    }, [])*/
+
     return (
         <>
             <Box
@@ -127,18 +156,38 @@ export default function PaginaInicial() {
                                 borderRadius: '50%',
                                 marginBottom: '16px',
                             }}
-                           src={`${username.length > 2 ? `https://github.com/${username}.png` : 'images/theme/zule.jpg'}`}
+                            src={`${username.length > 2 ? `https://github.com/${username}.png` : 'images/theme/zule.jpg'}`}
                         />
                         <Text
                             variant="body4"
                             styleSheet={{
                                 color: appConfig.theme.colors.neutrals[200],
                                 backgroundColor: appConfig.theme.colors.neutrals[900],
-                                padding: '3px 10px',
-                                borderRadius: '1000px'
+                                padding: '10px 10px',
+                                borderRadius: '1000px',
+                                textAlign: 'center'
                             }}
                         >
-                           {`${username.length > 2 ? `${username}` : 'Digite seu usuario'}`}
+                            <h3 style={{ marginBottom: '5px' }}>{`${username.length > 2 ? `${username}` : 'Digite seu usuario'}`}</h3>
+
+
+
+                            {followers &&
+                                <div className='col-md-12'>
+                                    <small style={{ marginBottom: '5px' }}> {bio} </small>
+                                    <p style={{ marginBottom: '5px' }}>  <br/> Seguidores: {followers} <br /> {location}</p>
+                                </div>
+                            }
+
+                            <Button label="Carregar dados"
+                            buttonColors={{
+                                contrastColor: appConfig.theme.colors.neutrals["000"],
+                                mainColor: appConfig.theme.colors.primary[100],
+                            }}
+                             onClick={(e) => {
+                                e.preventDefault()
+                                getDataFromGithub()
+                            }} />
                         </Text>
                     </Box>
                     {/* Photo Area */}

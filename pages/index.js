@@ -170,7 +170,7 @@ export default function PaginaInicial() {
                                 textAlign: 'center'
                             }}
                         >
-                            <h3 style={{ marginBottom: '5px' }}>{`${username.length > 2 ? `${username}` : 'Digite seu usuario'}`}</h3>
+                            <h3 style={{ marginBottom: '5px' }}>{`${username.length > 2 ? `@${username}` : 'Digite seu usuario'}`}</h3>
 
 
 

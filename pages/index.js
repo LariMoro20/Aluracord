@@ -11,6 +11,7 @@ export default function PaginaInicial() {
     const [followers, setFollowers] = React.useState('');
     const [bio, setBio] = React.useState('');
     const [error, setError] = React.useState('');
+    const [cont, setCont] = React.useState(0);
     const router = useRouter();
 
     function getDataFromGithub() {
@@ -19,12 +20,18 @@ export default function PaginaInicial() {
                 .then((res) => {
                     return res.json()
                 }).then((respComplete) => {
-                    setFollowers(respComplete.followers)
-                    setLocation(respComplete.location)
-                    setBio(respComplete.bio)
+                    if (respComplete.message) {
+                        if (cont === 0) { setError(`Houve algum erro, tente mais tarde..`); }
+                        else { setError(`Houve algum erro, tente mais tarde.. (${cont})`) }
+                        setCont(cont + 1)
+                    } else {
+                        setError('')
+                        setFollowers(respComplete.followers)
+                        setLocation(respComplete.location)
+                        setBio(respComplete.bio)
+                    }
                 }).catch((error) => {
-                    setInfos('')
-                    setError('Houve algum erro')
+                    throw error
                 });
         }
     }
@@ -63,7 +70,7 @@ export default function PaginaInicial() {
                                 pathname: '/chat',
                                 query: { username: username }
                             })
-                            
+
                         }}
                         styleSheet={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -132,7 +139,7 @@ export default function PaginaInicial() {
                             variant="body4"
                             styleSheet={{
                                 color: appConfig.theme.colors.neutrals[200],
-                               
+
                                 padding: '10px 10px',
                                 borderRadius: '1000px',
                                 textAlign: 'center'
@@ -145,11 +152,11 @@ export default function PaginaInicial() {
                                     <p style={{ marginBottom: '5px' }}>  <br /> Seguidores: {followers} <br /> {location}</p>
                                 </div>
                             }
-                            {error &&
-                                <div className='col-md-12'>
-                                    <p style={{ marginBottom: '5px' }}> {error} </p>
-                                </div>
-                            }
+
+                            <div className='col-md-12'>
+                                <p style={{ marginBottom: '5px' }}> {error} </p>
+                            </div>
+
 
                             <Button label="Carregar dados"
                                 buttonColors={{

@@ -171,9 +171,6 @@ export default function PaginaInicial() {
                             }}
                         >
                             <h3 style={{ marginBottom: '5px' }}>{`${username.length > 2 ? `@${username}` : 'Digite seu usuario'}`}</h3>
-
-
-
                             {(followers && !error) &&
                                 <div className='col-md-12'>
                                     <small style={{ marginBottom: '5px' }}> {bio} </small>
@@ -185,8 +182,6 @@ export default function PaginaInicial() {
                                     <p style={{ marginBottom: '5px' }}> {error} </p>
                                 </div>
                             }
-
-
 
                             <Button label="Carregar dados"
                                 buttonColors={{

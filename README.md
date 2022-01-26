@@ -12,7 +12,7 @@ Contem:
 - Roteamento;
 - Consumo de API;
 - Gerenciamento de Estado;
-- (em desenvolvimento)
+- Página 404
 
 ## Instalação
 

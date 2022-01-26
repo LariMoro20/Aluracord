@@ -1,8 +1,10 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-import appConfig from '../config.json'
+import React from 'react';
 import { useRouter } from 'next/router'
+import appConfig from '../config.json'
 
-export default function ChatPage() {
+// export default HomePage
+export default function Pagina404() {
     const router = useRouter();
 
     return (
@@ -11,13 +13,14 @@ export default function ChatPage() {
                 styleSheet={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     backgroundColor: appConfig.theme.colors.primary[500],
-                    backgroundImage: 'url(https://images6.alphacoders.com/118/thumb-1920-1185407.jpg)',
+                    backgroundImage: 'url(images/backgrounds/back-vis404.jpg)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
             >
                 <Box
+
                     styleSheet={{
-                        display: 'flex',
+
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         flexDirection: {
@@ -27,35 +30,24 @@ export default function ChatPage() {
                         width: '100%', maxWidth: '700px',
                         borderRadius: '5px', padding: '32px', margin: '16px',
                         boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
-                        backgroundColor: appConfig.theme.colors.neutrals[700],
+                        backgroundColor: appConfig.theme.colors.transparents[700],
+                        textAlign: 'center'
                     }}
                 >
-                    <Button
-                        onClick={(e) => {
-                            e.preventDefault
-                            router.push('/chat')
-                        }}
-                        label='Voltar'
-
+                    <h1 style={{ color: appConfig.theme.colors.neutrals[100], fontSize: '100px' }}>404</h1>
+                    <h2 style={{ color: appConfig.theme.colors.neutrals[100] }}>É, parece que esta página não existe</h2>
+                    <Button label="Voltar para o início"
+                        styleSheet={{ marginTop: '10px' }}
                         buttonColors={{
                             contrastColor: appConfig.theme.colors.neutrals["000"],
                             mainColor: appConfig.theme.colors.primary[200],
-                            mainColorLight: appConfig.theme.colors.primary[400],
-                            mainColorStrong: appConfig.theme.colors.primary[600],
                         }}
-                    />
-                    <h1>Chat messages</h1>
-                </Box>
-                <Box
-                    styleSheet={{
-                        width: '100%', maxWidth: '100%',
-                        borderRadius: '5px', padding: '32px', margin: '16px',
-                        boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
-                        backgroundColor: appConfig.theme.colors.neutrals[700],
-                    }}
-                >
+                        onClick={(e) => {
+                            e.preventDefault
+                            router.push('/')
+                        }} />
                 </Box>
             </Box>
         </>
-    )
+    );
 }

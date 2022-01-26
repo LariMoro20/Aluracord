@@ -2,34 +2,7 @@ import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import React from 'react';
 import { useRouter } from 'next/router'
 import appConfig from '../config.json'
-
-function Titulo(props) {
-    const Tag = props.tag || 'h1';
-    return (
-        <>
-            <Tag>
-                {props.children}
-            </Tag>
-            <style jsx>{`
-            ${Tag}{
-                color: ${appConfig.theme.colors.neutrals['200']}
-            }`
-            }</style>
-        </>
-    )
-}
-/*function HomePage() {
-    return (
-        <div>
-            <GlobalStyle />
-            <Titulo tag='h2'>
-                Bem vindo de volta!
-            </Titulo>
-            <h2>Discord- aluracord</h2>
-        </div>
-    )
-}*/
-
+import Titulo from '../components/Titulos';
 
 // export default HomePage
 export default function PaginaInicial() {
@@ -56,21 +29,12 @@ export default function PaginaInicial() {
         }
     }
 
-    /*React.useEffect(() => {
-        fetch(`https://api.github.com/users/${username}/`)
-            .then((res) => {
-                return res.json()
-            }).then((respComplete) => {
-                console.log(respComplete)
-            }).catch
-    }, [])*/
-
     return (
         <>
             <Box
                 styleSheet={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    backgroundColor: appConfig.theme.colors.primary[500],
+                    backgroundColor: appConfig.theme.colors.primary[600],
                     backgroundImage: 'url(images/backgrounds/back-vis.jpg)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
@@ -95,7 +59,11 @@ export default function PaginaInicial() {
                         as="form"
                         onSubmit={(e) => {
                             e.preventDefault()
-                            router.push('/chat')
+                            router.push({
+                                pathname: '/chat',
+                                query: { username: username }
+                            })
+                            
                         }}
                         styleSheet={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',

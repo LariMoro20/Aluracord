@@ -2,6 +2,7 @@ import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import React from 'react';
 import { useRouter } from 'next/router'
 import appConfig from '../config.json'
+import Titulo from '../components/Titulos';
 
 // export default HomePage
 export default function Pagina404() {
@@ -20,13 +21,6 @@ export default function Pagina404() {
                 <Box
 
                     styleSheet={{
-
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        flexDirection: {
-                            xs: 'column',
-                            sm: 'row',
-                        },
                         width: '100%', maxWidth: '700px',
                         borderRadius: '5px', padding: '32px', margin: '16px',
                         boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
@@ -34,8 +28,8 @@ export default function Pagina404() {
                         textAlign: 'center'
                     }}
                 >
-                    <h1 style={{ color: appConfig.theme.colors.neutrals[100], fontSize: '100px' }}>404</h1>
-                    <h2 style={{ color: appConfig.theme.colors.neutrals[100] }}>É, parece que esta página não existe</h2>
+                    <Text variant="heading1" styleSheet={{ color: appConfig.theme.colors.neutrals[100] }}>404</Text><br/> 
+                    <Text variant='body1' styleSheet={{ color: appConfig.theme.colors.neutrals[100] }}>É, parece que esta página não existe</Text><br/> 
                     <Button label="Voltar para o início"
                         styleSheet={{ marginTop: '10px' }}
                         buttonColors={{

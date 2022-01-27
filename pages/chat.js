@@ -5,8 +5,20 @@ import React from 'react';
 import Messages from '../components/Messages/Messages';
 export default function ChatPage() {
     const router = useRouter();
-    const [messages, setMessage] = React.useState([]);
+
+    const [message, setMessage] = React.useState('');
+    const [messages, setMessages] = React.useState([]);
     let username = router.query.username || 'larimoro20';
+
+    function handleSaveMessage() {
+        const newmessages = [...messages, {
+            text: message,
+            from: username,
+            key: Date.now()
+        }]
+        setMessages(newmessages)
+        setMessage('')
+    }
     return (
         <>
             <Box
@@ -58,32 +70,29 @@ export default function ChatPage() {
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}>
 
-                   
-                       
-                                <Messages itens={messages}/>
-                                    
-                               
-                            
-                    
+                    <Messages itens={messages} />
 
                     <Box
                         as="form"
                         onSubmit={function handlAddMessage(e) {
                             e.preventDefault();
-                            const dadosform = new FormData(e.target);
-                            const message = {
-                                text: dadosform.get('text'),
-                                username: username
-                            }
-                            const newmessages = [...messages, message]
-                            setMessage(newmessages)
-                            console.log(newmessages)
+                            handleSaveMessage()
                         }}
 
                     >
                         <TextField
                             label="Digite sua mensagem"
-                            placeholder=""
+                            value={message}
+                            onChange={(e) => {
+                                setMessage(e.target.value)
+                            }}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault()
+                                    handleSaveMessage()
+
+                                }
+                            }}
                             name="text"
                             type="textarea"
                             variant="basicBordered"

@@ -9,7 +9,7 @@ function MessageItem(props) {
                 boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
                 backgroundColor: appConfig.theme.colors.neutrals[200],
             }}>
-            <Text variant='body3'>@{props.username}</Text><br/>
+            <Text variant='body3'>@{props.from}</Text><br/>
             <Text variant='body4'>{props.text}</Text>
         </Box>
     )
@@ -27,7 +27,7 @@ export default function Messages(props) {
             {props.itens.length >0 ? '' : 'Sem mensagens'}
             {props.itens.map((msg) => {
                 return (
-                    <MessageItem text={msg.text} username={msg.username}/>
+                    <MessageItem text={msg.text} from={msg.from} key={msg.key}/>
                 )
             })}
         </Box>

@@ -13,11 +13,13 @@ const supabaseUrl = 'https://egasluadiupoacklwswi.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMyMDE0OCwiZXhwIjoxOTU4ODk2MTQ4fQ.AUND2te685ycqKXeuzDkrnhT92Wz-l-GCxAble6LCc0'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-function escutaEmTempoReal(adicionaMsg) {
-    return supabase
+function escutaEmTempoReal(response) {
+    supabase
         .from('messages')
         .on('INSERT', (resp) => {
-            adicionaMsg(resp.new)
+            response(resp)
+        }).on('DELETE', (resp) => {
+            response(resp.old.id)
         }).subscribe();
 }
 
@@ -27,7 +29,7 @@ export default function ChatPage(props) {
     const [message, setMessage] = React.useState('');
     const [error, setError] = React.useState('');
     const [messages, setMessages] = React.useState([]);
-    let username = router.query.username || 'larimoro20';    
+    let username = router.query.username || 'larimoro20';
 
     React.useEffect(() => {
         supabase.from('messages')
@@ -39,24 +41,41 @@ export default function ChatPage(props) {
                 })
                 setMessages(data)
             })
-        escutaEmTempoReal((newMesage) => {
-            newMesage.created_at = moment(newMesage.created_at).format("D/MM/Y H:mm")
-            setMessages((valorAtual) => {
-                return [
-                    ...valorAtual,
-                    newMesage
-                ]
-            })
-            setMessage('')
-        })
 
+        const subscribe = escutaEmTempoReal((response) => {
+            if (response.eventType === "INSERT") {
+                response.new.created_at = moment(response.new.created_at).format("D/MM/Y H:mm")
+                setMessages((valorAtual) => {
+                    return [
+                        ...valorAtual,
+                        response.new
+                    ]
+                })
+            } else {
+                setMessages((valorAtualDaListaMensagens) =>
+                    valorAtualDaListaMensagens.filter(
+                        (mensagem) => mensagem.id !== response
+                    )
+                )
+            }
+        })
+        setMessage('')
         
+        return () => subscribe.unsubscribe();
 
     }, []);
 
     function logout() {
         destroyCookie(null, "aluravis_user");
         router.push("/");
+    }
+
+    function remove(id) {
+        supabase
+            .from('messages')
+            .delete()
+            .match({ id }).then(({ data }) => {
+            })
     }
 
     function handleSaveMessage(message) {
@@ -101,7 +120,7 @@ export default function ChatPage(props) {
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}
                 >
-                    <Text variant="heading3" styleSheet={{ color: appConfig.theme.colors.neutrals[100], marginLeft: '50px' }}>Chat messages</Text>
+                    <Text variant="heading3" styleSheet={{ color: appConfig.theme.colors.neutrals[100], marginLeft: '50px' }}>Chat messages [ {username} ]</Text>
                     <Button
                         onClick={(e) => {
                             e.preventDefault
@@ -127,7 +146,7 @@ export default function ChatPage(props) {
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}>
 
-                    <Messages itens={messages} userlogged={username} />
+                    <Messages itens={messages} userlogged={username} removeMessage={remove} />
 
                     <Box
                         styleSheet={{
@@ -185,17 +204,17 @@ export default function ChatPage(props) {
     )
 }
 
- /*export async function getServerSideProps(ctx) {
-    const cookies = parseCookies(ctx)
-    //console.log('console', cookies.aluravis_user)
-   if (!cookies.aluravis_user) {
-     return {
-       redirect: {
-         permanent: false,
-         destination: "/",
-       }
-     }
-   }
+/*export async function getServerSideProps(ctx) {
+   const cookies = parseCookies(ctx)
+   //console.log('console', cookies.aluravis_user)
+  if (!cookies.aluravis_user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      }
+    }
+  }
 
-    return { props: { user: cookies.aluravis_user } }
+   return { props: { user: cookies.aluravis_user } }
 }*/

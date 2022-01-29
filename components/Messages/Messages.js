@@ -1,5 +1,6 @@
-import { Box, Button, Text, TextField, Image } from '@skynexui/components';
+import { Box, Button, Text, Icon, Image } from '@skynexui/components';
 import appConfig from '../../config.json'
+import { IoMdSend, IoMdTrash } from "react-icons/io";
 
 function MessageItem(props) {
     return (
@@ -14,34 +15,46 @@ function MessageItem(props) {
                 styleSheet={{
                     width: '100%', maxWidth: '100%',
                     display: 'flex', alignItems: 'center',
+                    justifyContent: 'space-between'
                 }}>
-                <Image
+                <Box tag='div'
                     styleSheet={{
-                        borderRadius: '50%',
-                        width: '30px',
-                        marginRight: '10px'
-                    }}
-                    src={`${props.from.length > 2 ? `https://github.com/${props.from}.png` : 'images/theme/zule.jpg'}`}
-                />
+                        width: '100%', maxWidth: '100%',
+                        display: 'flex', alignItems: 'center',
 
-                <Text variant='body3' styleSheet={{color:  appConfig.theme.colors.primary[600]}}>@{props.from} - {props.data} </Text>
-                {props.userlogged == props.from && <Button label='deleta'></Button>}
-            
+                    }}>
+                    <Image
+                        styleSheet={{
+                            borderRadius: '50%',
+                            width: '30px',
+                            marginRight: '10px'
+                        }}
+                        src={`${props.from.length > 2 ? `https://github.com/${props.from}.png` : 'images/theme/zule.jpg'}`}
+                    />
+
+                    <Text variant='body3' styleSheet={{ color: appConfig.theme.colors.primary[600] }}>@{props.from} - {props.data} </Text>
+                </Box>
+                {props.userlogged == props.from && <button
+                    onClick={() => { props.removeMessage(props.id) }}
+
+                    className='chat_messageArea-btn'
+                > <IoMdTrash size={`1.2rem`} color={ appConfig.theme.colors.primary[100] } /></button>}
+
             </Box>
             <Text variant='body4'>
                 {props.text.startsWith(':sticker:') ? (
-                   <Image styleSheet={{maxWidth:'200px', padding:'10px'}} src={props.text.replace(':sticker:', '')} />
-                ):(
+                    <Image styleSheet={{ maxWidth: '200px', padding: '10px' }} src={props.text.replace(':sticker:', '')} />
+                ) : (
                     props.text
                 )}
-               
+
             </Text>
         </Box>
     )
 }
 
 export default function Messages(props) {
-    
+
     return (
         <Box tag='div'
             styleSheet={{
@@ -53,7 +66,7 @@ export default function Messages(props) {
             {props.itens.length > 0 ? '' : 'Sem mensagens'}
             {props.itens.map((msg) => {
                 return (
-                    <MessageItem text={msg.text} from={msg.from} key={msg.id} data={msg.created_at} userlogged={props.userlogged} />
+                    <MessageItem text={msg.text} from={msg.from} key={msg.id} id={msg.id} data={msg.created_at} userlogged={props.userlogged} removeMessage={props.removeMessage} />
                 )
             })}
         </Box>

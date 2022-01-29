@@ -44,15 +44,15 @@ export default function PaginaInicial() {
                 if (respComplete.message) {
                     setError('Usuario invalido')
                 } else {
-                    setCookie(null, "aluravis_user", username, {
+                     /*setCookie(null, "aluravis_user", username, {
                         maxAge: 86400 * 30,
                         path: "/",
                       });
-                      router.push("/chat");
-                    /*router.push({
+                      router.push("/chat");*/
+                   router.push({
                         pathname: '/chat',
                         query: { username: username }
-                    })*/
+                    })
                 }
             })
     }

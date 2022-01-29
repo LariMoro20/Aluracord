@@ -27,7 +27,9 @@ export default function ChatPage(props) {
     const [message, setMessage] = React.useState('');
     const [error, setError] = React.useState('');
     const [messages, setMessages] = React.useState([]);
-    let username = props.user;
+    let username = router.query.username;
+    console.log(username)
+    
 
     React.useEffect(() => {
         supabase.from('messages')
@@ -49,7 +51,9 @@ export default function ChatPage(props) {
             })
             setMessage('')
         })
+
         
+
     }, []);
 
     function logout() {
@@ -125,7 +129,7 @@ export default function ChatPage(props) {
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}>
 
-                    <Messages itens={messages} userlogged={username}/>
+                    <Messages itens={messages} userlogged={username} />
 
                     <Box
                         styleSheet={{
@@ -183,17 +187,17 @@ export default function ChatPage(props) {
     )
 }
 
-export async function getServerSideProps(ctx) {
-   const cookies = parseCookies(ctx)
-   console.log('console', cookies.aluravis_user)
-   /*if (!cookies.aluravis_user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/",
-      }
-    }
-  }*/
-  
-    return { props: {user: cookies.aluravis_user} }
-  }
+ /*export async function getServerSideProps(ctx) {
+    const cookies = parseCookies(ctx)
+    //console.log('console', cookies.aluravis_user)
+   if (!cookies.aluravis_user) {
+     return {
+       redirect: {
+         permanent: false,
+         destination: "/",
+       }
+     }
+   }
+
+    return { props: { user: cookies.aluravis_user } }
+}*/

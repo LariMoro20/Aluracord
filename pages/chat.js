@@ -55,6 +55,7 @@ export default function ChatPage(props) {
                         response.new
                     ]
                 })
+                setMessage('')
             } else {
                 setMessages((valorAtualDaListaMensagens) =>
                     valorAtualDaListaMensagens.filter(

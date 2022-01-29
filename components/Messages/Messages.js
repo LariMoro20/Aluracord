@@ -6,15 +6,7 @@ import React, { useEffect, useRef }  from 'react';
 function MessageItem(props) {
     //const [message, setMessage] = React.useState();
 
-    const messagesEndRef = useRef(null);
-
-    const scrollToBottom = () => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    useEffect(() => {
-        scrollToBottom();
-      }, [props]);
+    
    
    // const [src, setSrc] = React.useState(props.src);
     return (
@@ -68,14 +60,22 @@ function MessageItem(props) {
                 )}
 
             </Text>
-            <div ref={messagesEndRef} />
+           
         </Box>
     )
 }
 
 export default function Messages(props) {
    
+    const messagesEndRef = useRef(null);
 
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+      }, [props.itens]);
     return (
         <Box tag='div'
             styleSheet={{
@@ -90,6 +90,7 @@ export default function Messages(props) {
                     <MessageItem text={msg.text} from={msg.from} key={msg.id} id={msg.id} data={msg.created_at} userlogged={props.userlogged} removeMessage={props.removeMessage} />
                 )
             })}
+             <div ref={messagesEndRef} />
         </Box>
     )
 }

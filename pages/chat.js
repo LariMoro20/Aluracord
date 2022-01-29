@@ -27,9 +27,7 @@ export default function ChatPage(props) {
     const [message, setMessage] = React.useState('');
     const [error, setError] = React.useState('');
     const [messages, setMessages] = React.useState([]);
-    let username = router.query.username;
-    console.log(username)
-    
+    let username = router.query.username || 'larimoro20';    
 
     React.useEffect(() => {
         supabase.from('messages')

@@ -33,7 +33,7 @@ export default function ChatPage(props) {
     
 
     React.useEffect(() => {
-        if(username===undefined)
+        if(username===undefined || username.length < 2)
             router.push('/')
 
         supabase.from('messages')

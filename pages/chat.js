@@ -185,14 +185,14 @@ export default function ChatPage(props) {
 
 export async function getServerSideProps(ctx) {
    const cookies = parseCookies(ctx)
-   if (!cookies.aluravis_user) {
+   /*if (!cookies.aluravis_user) {
     return {
       redirect: {
         permanent: false,
         destination: "/",
       }
     }
-  }
+  }*/
   
     return { props: {user: cookies.aluravis_user} }
   }

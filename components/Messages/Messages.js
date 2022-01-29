@@ -1,8 +1,21 @@
 import { Box, Button, Text, Icon, Image } from '@skynexui/components';
 import appConfig from '../../config.json'
 import { IoMdSend, IoMdTrash } from "react-icons/io";
+import React, { useEffect, useRef }  from 'react';
 
 function MessageItem(props) {
+    //const [message, setMessage] = React.useState();
+
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+      }, [props]);
+   
    // const [src, setSrc] = React.useState(props.src);
     return (
         
@@ -55,11 +68,13 @@ function MessageItem(props) {
                 )}
 
             </Text>
+            <div ref={messagesEndRef} />
         </Box>
     )
 }
 
 export default function Messages(props) {
+   
 
     return (
         <Box tag='div'

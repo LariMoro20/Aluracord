@@ -23,9 +23,18 @@ function MessageItem(props) {
                     }}
                     src={`${props.from.length > 2 ? `https://github.com/${props.from}.png` : 'images/theme/zule.jpg'}`}
                 />
+
                 <Text variant='body3' styleSheet={{color:  appConfig.theme.colors.primary[600]}}>@{props.from} - {props.data} </Text>
+            
             </Box>
-            <Text variant='body4'>{props.text}</Text>
+            <Text variant='body4'>
+                {props.text.startsWith(':sticker:') ? (
+                   <Image styleSheet={{maxWidth:'200px', padding:'10px'}} src={props.text.replace(':sticker:', '')} />
+                ):(
+                    props.text
+                )}
+               
+            </Text>
         </Box>
     )
 }

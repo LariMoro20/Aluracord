@@ -1,5 +1,6 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import React from 'react';
+import { parseCookies, setCookie } from "nookies";
 import { useRouter } from 'next/router'
 import appConfig from '../config.json'
 import Titulo from '../components/Titulos';
@@ -35,6 +36,26 @@ export default function PaginaInicial() {
                 });
         }
     }
+    function doLogin() {
+        fetch(`https://api.github.com/users/${username}`)
+            .then((res) => {
+                return res.json()
+            }).then((respComplete) => {
+                if (respComplete.message) {
+                    setError('Usuario invalido')
+                } else {
+                    setCookie(null, "aluravis_user", username, {
+                        maxAge: 86400 * 30,
+                        path: "/",
+                      });
+                      router.push("/chat");
+                    /*router.push({
+                        pathname: '/chat',
+                        query: { username: username }
+                    })*/
+                }
+            })
+    }
 
     return (
         <>
@@ -66,10 +87,7 @@ export default function PaginaInicial() {
                         as="form"
                         onSubmit={(e) => {
                             e.preventDefault()
-                            router.push({
-                                pathname: '/chat',
-                                query: { username: username }
-                            })
+                            doLogin()
 
                         }}
                         styleSheet={{
@@ -100,6 +118,7 @@ export default function PaginaInicial() {
                         <Button
                             type='submit'
                             label='Entrar'
+                            disabled={username.length <= 2 ? true : false}
                             fullWidth
                             buttonColors={{
                                 contrastColor: appConfig.theme.colors.neutrals["000"],

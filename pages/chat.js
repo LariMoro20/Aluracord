@@ -2,21 +2,34 @@ import { Box, Button, Text, TextField } from '@skynexui/components';
 import appConfig from '../config.json'
 import { useRouter } from 'next/router'
 import React from 'react';
+import { GetServerSideProps } from "next";
 import moment from 'moment';
-
+import { destroyCookie, parseCookies } from "nookies";
+import nookies from 'nookies'
 import { IoMdSend } from "react-icons/io";
 import { createClient } from '@supabase/supabase-js'
 import Messages from '../components/Messages/Messages';
+import { ButtonSendSticker } from '../components/ButtonSendSticker'
+
 const supabaseUrl = 'https://egasluadiupoacklwswi.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMyMDE0OCwiZXhwIjoxOTU4ODk2MTQ4fQ.AUND2te685ycqKXeuzDkrnhT92Wz-l-GCxAble6LCc0'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-export default function ChatPage() {
+function escutaEmTempoReal(adicionaMsg) {
+    return supabase
+        .from('messages')
+        .on('INSERT', (resp) => {
+            adicionaMsg(resp.new)
+        }).subscribe();
+}
+
+
+export default function ChatPage(props) {
     const router = useRouter();
     const [message, setMessage] = React.useState('');
     const [error, setError] = React.useState('');
     const [messages, setMessages] = React.useState([]);
-    let username = router.query.username || 'larimoro20';
+    let username = props.user;
 
     React.useEffect(() => {
         supabase.from('messages')
@@ -28,26 +41,35 @@ export default function ChatPage() {
                 })
                 setMessages(data)
             })
+        escutaEmTempoReal((newMesage) => {
+            newMesage.created_at = moment(newMesage.created_at).format("D/MM/Y H:mm")
+            setMessages((valorAtual) => {
+                return [
+                    ...valorAtual,
+                    newMesage
+                ]
+            })
+            setMessage('')
+        })
+        
     }, []);
 
+    function logout() {
+        destroyCookie(null, "aluravis_user");
+        router.push("/");
+    }
 
-    function handleSaveMessage() {
-        if(message!==''){
-        const newmessage = {
-            text: message,
-            from: username,
-        }
-        supabase.from('messages')
-            .insert([newmessage])
-            .then(({ data }) => {
-                setMessages([
-                    ...messages,
-                    data[0]
-                ])
-                setMessage('')
-            })
-            setError('')
-        }else{
+    function handleSaveMessage(message) {
+        if (message !== '') {
+            const newmessage = {
+                text: message,
+                from: username,
+            }
+            supabase.from('messages')
+                .insert([newmessage])
+                .then(({ data }) => {
+                })
+        } else {
             setError('Digite uma mensagem')
         }
     }
@@ -79,11 +101,11 @@ export default function ChatPage() {
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}
                 >
-                     <Text variant="heading3" styleSheet={{ color: appConfig.theme.colors.neutrals[100], marginLeft: '50px' }}>Chat messages</Text>
+                    <Text variant="heading3" styleSheet={{ color: appConfig.theme.colors.neutrals[100], marginLeft: '50px' }}>Chat messages</Text>
                     <Button
                         onClick={(e) => {
                             e.preventDefault
-                            router.push('/')
+                            logout()
                         }}
                         label='Logout'
                         buttonColors={{
@@ -93,7 +115,7 @@ export default function ChatPage() {
                             mainColorStrong: appConfig.theme.colors.primary[600],
                         }}
                     />
-                   
+
                 </Box>
 
 
@@ -108,12 +130,13 @@ export default function ChatPage() {
                     <Messages itens={messages} />
 
                     <Box
-                    styleSheet={{
-                        display: 'flex', alignItems: 'center'}}
+                        styleSheet={{
+                            display: 'flex', alignItems: 'center'
+                        }}
                         as="form"
                         onSubmit={function handlAddMessage(e) {
                             e.preventDefault();
-                            handleSaveMessage()
+                            handleSaveMessage(message)
                         }}
                         className='chat_messageArea'
                     >
@@ -128,14 +151,17 @@ export default function ChatPage() {
                             onKeyPress={(e) => {
                                 if (e.key === 'Enter') {
                                     e.preventDefault()
-                                    handleSaveMessage()
+                                    handleSaveMessage(message)
                                 }
                             }}
                             name="text"
                             type="textarea"
                             variant="basicBordered"
                         />
-                        
+                        <ButtonSendSticker onStickerClick={(sticker) => {
+                            handleSaveMessage(':sticker:' + sticker)
+                        }} />
+
                         <Box tag='div' styleSheet={{
                             display: 'flex',
                             alignItems: 'center',
@@ -146,15 +172,29 @@ export default function ChatPage() {
                                     e.preventDefault
                                 }}
                                 type='submit'
-                               
-                               className='chat_messageArea-btn'
+
+                                className='chat_messageArea-btn'
                             > <IoMdSend size={`2.2rem`} color="#E2E8F0" /></button>
                         </Box>
                     </Box>
-                    <Text styleSheet={{color:  appConfig.theme.colors.primary[700]}}>{error}</Text>
+                    <Text styleSheet={{ color: appConfig.theme.colors.primary[700] }}>{error}</Text>
                 </Box>
             </Box>
 
         </>
     )
 }
+
+export async function getServerSideProps(ctx) {
+   const cookies = parseCookies(ctx)
+   if (!cookies.aluravis_user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      }
+    }
+  }
+  
+    return { props: {user: cookies.aluravis_user} }
+  }

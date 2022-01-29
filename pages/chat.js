@@ -71,13 +71,15 @@ export default function ChatPage(props) {
         router.push("/");
     }
 
-    function remove(id) {
-        supabase
-            .from('messages')
-            .delete()
-            .match({ id }).then(({ data }) => {
-            })
-    }
+    const remove = async (id) => {
+        const { data, error } = await supabase
+          .from('messages')
+          .delete()
+          .match({ id })
+        if (error) throw error
+        return data[0]
+      }
+
 
     function handleSaveMessage(message) {
         if (message !== '') {

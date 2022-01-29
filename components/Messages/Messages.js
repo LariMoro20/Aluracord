@@ -3,7 +3,9 @@ import appConfig from '../../config.json'
 import { IoMdSend, IoMdTrash } from "react-icons/io";
 
 function MessageItem(props) {
+   // const [src, setSrc] = React.useState(props.src);
     return (
+        
         <Box tag='div'
             styleSheet={{
                 width: '100%', maxWidth: '100%',
@@ -29,7 +31,11 @@ function MessageItem(props) {
                             width: '30px',
                             marginRight: '10px'
                         }}
-                        src={`${props.from.length > 2 ? `https://github.com/${props.from}.png` : 'images/theme/zule.jpg'}`}
+                        src={ `https://github.com/${props.from.replace(' ', '')}.png` || 'images/theme/zule.jpg'}
+                        onError={()=>{
+                            //setImgSrc('images/theme/zule.jpg');
+                            
+                        }}
                     />
 
                     <Text variant='body3' styleSheet={{ color: appConfig.theme.colors.primary[600] }}>@{props.from} - {props.data} </Text>

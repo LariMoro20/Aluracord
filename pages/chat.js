@@ -2,10 +2,8 @@ import { Box, Button, Text, TextField } from '@skynexui/components';
 import appConfig from '../config.json'
 import { useRouter } from 'next/router'
 import React from 'react';
-import { GetServerSideProps } from "next";
 import moment from 'moment';
 import { destroyCookie, parseCookies } from "nookies";
-import nookies from 'nookies'
 import { IoMdSend } from "react-icons/io";
 import { createClient } from '@supabase/supabase-js'
 import Messages from '../components/Messages/Messages';
@@ -127,7 +125,7 @@ export default function ChatPage(props) {
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}>
 
-                    <Messages itens={messages} />
+                    <Messages itens={messages} userlogged={username}/>
 
                     <Box
                         styleSheet={{

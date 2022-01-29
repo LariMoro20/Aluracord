@@ -7,7 +7,7 @@ function MessageItem(props) {
         <Box tag='div'
             styleSheet={{
                 width: '100%', maxWidth: '100%',
-                borderRadius: '5px', padding: '10px', marginVertical: '10px',
+                borderRadius: '5px', padding: '5px 10px 5px 10px', marginVertical: '10px',
                 boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
                 backgroundColor: appConfig.theme.colors.transparents[200],
             }}>

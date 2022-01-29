@@ -169,7 +169,7 @@ export default function ChatPage(props) {
 
                         <input
                             className='chat_messageArea-input'
-                            label="Digite sua mensagem"
+                            placeholder="Digite sua mensagem"
                             value={message}
                             onChange={(e) => {
                                 setMessage(e.target.value)

@@ -9,27 +9,28 @@ import { createClient } from '@supabase/supabase-js'
 import Messages from '../components/Messages/Messages';
 import { ButtonSendSticker } from '../components/ButtonSendSticker'
 
-const supabaseUrl = 'https://egasluadiupoacklwswi.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMyMDE0OCwiZXhwIjoxOTU4ODk2MTQ4fQ.AUND2te685ycqKXeuzDkrnhT92Wz-l-GCxAble6LCc0'
-const supabase = createClient(supabaseUrl, supabaseKey)
-
-function escutaEmTempoReal(response) {
-    supabase
-        .from('messages')
-        .on('INSERT', (resp) => {
-            response(resp)
-        }).on('DELETE', (resp) => {
-            response(resp.old.id)
-        }).subscribe();
-}
 
 
 export default function ChatPage(props) {
+    const supabaseUrl = props.SUPABASE_URL;//'https://egasluadiupoacklwswi.supabase.co'
+    const supabaseKey = props.SUPABASE_KEY;//'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMyMDE0OCwiZXhwIjoxOTU4ODk2MTQ4fQ.AUND2te685ycqKXeuzDkrnhT92Wz-l-GCxAble6LCc0'
+    const supabase = createClient(supabaseUrl, supabaseKey)
     const router = useRouter();
     const [message, setMessage] = React.useState('');
     const [error, setError] = React.useState('');
     const [messages, setMessages] = React.useState([]);
     let username = router.query.username || 'larimoro20';
+    
+    function escutaEmTempoReal(response) {
+        supabase
+            .from('messages')
+            .on('INSERT', (resp) => {
+                response(resp)
+            }).on('DELETE', (resp) => {
+                response(resp.old.id)
+            }).subscribe();
+    }
+    
 
     React.useEffect(() => {
         supabase.from('messages')
@@ -60,7 +61,7 @@ export default function ChatPage(props) {
             }
         })
         setMessage('')
-        
+
         return () => subscribe.unsubscribe();
 
     }, []);
@@ -204,17 +205,7 @@ export default function ChatPage(props) {
     )
 }
 
-/*export async function getServerSideProps(ctx) {
-   const cookies = parseCookies(ctx)
-   //console.log('console', cookies.aluravis_user)
-  if (!cookies.aluravis_user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/",
-      }
-    }
-  }
-
-   return { props: { user: cookies.aluravis_user } }
-}*/
+export async function getServerSideProps() {
+   const {SUPABASE_KEY, SUPABASE_URL  } = process.env;
+   return { props: { SUPABASE_KEY, SUPABASE_URL } }
+}

@@ -19,7 +19,7 @@ export default function ChatPage(props) {
     const [message, setMessage] = React.useState('');
     const [error, setError] = React.useState('');
     const [messages, setMessages] = React.useState([]);
-    let username = router.query.username || 'larimoro20';
+    let username = router.query.username;
     
     function escutaEmTempoReal(response) {
         supabase
@@ -33,6 +33,9 @@ export default function ChatPage(props) {
     
 
     React.useEffect(() => {
+        if(username===undefined)
+            router.push('/')
+
         supabase.from('messages')
             .select('*')
             //.order('id', {ascending: false})

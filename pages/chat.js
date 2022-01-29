@@ -185,6 +185,7 @@ export default function ChatPage(props) {
 
 export async function getServerSideProps(ctx) {
    const cookies = parseCookies(ctx)
+   console.log(cookies.aluravis_user)
    /*if (!cookies.aluravis_user) {
     return {
       redirect: {

@@ -25,6 +25,7 @@ function MessageItem(props) {
                 />
 
                 <Text variant='body3' styleSheet={{color:  appConfig.theme.colors.primary[600]}}>@{props.from} - {props.data} </Text>
+                {props.userlogged == props.from && <Button label='deleta'></Button>}
             
             </Box>
             <Text variant='body4'>
@@ -40,6 +41,7 @@ function MessageItem(props) {
 }
 
 export default function Messages(props) {
+    
     return (
         <Box tag='div'
             styleSheet={{
@@ -51,7 +53,7 @@ export default function Messages(props) {
             {props.itens.length > 0 ? '' : 'Sem mensagens'}
             {props.itens.map((msg) => {
                 return (
-                    <MessageItem text={msg.text} from={msg.from} key={msg.id} data={msg.created_at} />
+                    <MessageItem text={msg.text} from={msg.from} key={msg.id} data={msg.created_at} userlogged={props.userlogged} />
                 )
             })}
         </Box>

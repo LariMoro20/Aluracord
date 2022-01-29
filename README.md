@@ -12,7 +12,10 @@ Contem:
 - Roteamento;
 - Consumo de API;
 - Gerenciamento de Estado;
-- Página 404
+- Página 404;
+- Atualização em tempo real;
+- Envio de mensagens
+- Exclusão de mensagens (somente do usuario logado)
 
 ## Instalação
 
